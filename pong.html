@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   
+   
+    <canvas id="cnv"></canvas>
+    <p id="pointsDisplay">0</p>
+<p id="levelDisplay">0</p>
+<p id="lifeDisplay">0</p>
+<p id="gameOverText"></p>
+
+<input type="button"value="start part"id="restart"onclick="btnRestart();">
+<input type="button"value="reload"id='reload'onclick="reload();">
+
+<style>
+
+#gameOverText{
+
+    
+position:fixed;
+color:white;
+left:100px;
+top:300px;
+font-size: 30px;
+
+}
+
+
+
+#reload{
+position:fixed;
+left:400px;
+top:50px;
+
+
+}
+
+
+#restart{
+
+    position:fixed;
+    left:400px;
+}
+
+
+#lifeDisplay{
+    position:fixed;
+    color:red;
+    font-size: 30px;
+    top:0px;
+    left:300px;
+}
+
+
+
+
+#levelDisplay{
+
+    position:fixed;
+    color:green;
+    font-size: 30px;
+    left:150px;
+    top:0px;
+}
+
+
+
+#pointsDisplay{
+
+    position:fixed;
+    color: blue;
+    font-size:30px;
+top:0;
+left:0;
+
+
+}
+
+
+
+#cnv{
+position:fixed;
+background-color: black;
+top:0;
+left:0;
+
+}
+
+
+
+</style>
+
+
+
+
+
+<script>
+
+cnv.width=window.innerWidth;
+cnv.height=window.innerHeight;
+
+var ctx=cnv.getContext('2d');
+
+var raquetPosX=30;
+var raquetPosY=100;
+
+
+var balX=40;
+var balY=100;
+
+
+var downPressed=false;
+var upPressed=false;
+
+var raquetWidth=10;
+var raquetHeight=50;
+
+var vecteurVX=1;
+var vecteurVY=1;
+var countPoint=0;
+var countLevel=0;
+var countLife=3;
+
+var anim1=0;
+
+
+
+
+
+
+
+function drawBall(){
+
+    ctx.fillStyle="green";
+    ctx.fillRect(balX,balY,10,10);
+    //ctx.fill();
+
+
+}
+
+
+
+function draw(){
+
+
+
+    ctx.clearRect(0,0,cnv.width,cnv.height);
+
+    drawBall();
+
+
+    //cadran
+    ctx.strokeStyle="white";
+ctx.strokeRect(10,100,380,500);
+ctx.stroke();
+
+
+//raquette
+ctx.fillStyle="orange";
+ctx.fillRect(raquetPosX,raquetPosY,raquetWidth,raquetHeight);
+ctx.fill();
+
+
+
+
+
+if(downPressed&&raquetPosY<550){
+    raquetPosY+=5;
+}else if(upPressed&&raquetPosY>100){
+raquetPosY-=5;
+
+
+
+}
+
+
+
+//rebondissement de la balle
+
+
+balX+=vecteurVX;
+balY+=vecteurVY;
+
+ if(balX>380){
+    vecteurVX=-1;
+    countPoint++;
+
+ }if(balX==raquetPosX && balY>=raquetPosY && balY<=raquetPosY+50){
+    vecteurVX=1;
+ }
+
+ 
+
+
+
+
+
+
+
+if(balY>=590){
+    vecteurVY=-1;
+}else if(balY<100){
+    vecteurVY=1;
+}
+
+
+
+
+
+
+
+
+//affiche point
+
+
+pointsDisplay.innerHTML=countPoint+" "+"points";
+levelDisplay.innerHTML="level"+" "+countLevel;
+lifeDisplay.innerHTML=countLife+" "+"lifes";
+
+
+
+ 
+
+
+
+
+
+
+
+
+anim1=requestAnimationFrame(draw);
+
+
+
+if(balX==0){
+
+
+//cancelAnimationFrame(anim1);
+
+countLife-=1;
+
+
+}if(countLife==0){
+
+
+gameOverText.innerHTML="GAME-OVER";
+
+
+
+cancelAnimationFrame(anim1);
+
+
+
+
+}
+
+
+}
+draw();
+
+
+
+
+
+
+
+
+document.addEventListener('keydown',keyDownHandler,false);
+document.addEventListener('keyup',keyUpHandler,false);
+
+
+
+function keyDownHandler(e){
+//document.body.onkeydown=function(e){
+//draw();
+
+    if(e.code=='ArrowDown'){
+
+downPressed=true;
+
+    }else if(e.code=='ArrowUp'){
+
+upPressed=true;
+
+
+    }
+
+
+}
+
+
+function keyUpHandler(e){
+//document.body.onkeyup=function(e){
+//draw();
+
+
+if(e.code=='ArrowDown'){
+
+downPressed=false;
+
+}else if(e.code=='ArrowUp'){
+
+upPressed=false;
+
+
+
+}
+
+
+
+
+
+}
+
+
+function btnRestart(){
+
+
+balX=40;
+balY=100;
+vecteurVX=1;
+//cancelAnimationFrame(anim1);
+
+
+}
+
+
+function reload(){
+
+document.location.reload();
+
+}
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
